@@ -5,7 +5,6 @@ import homeLogo from '../../assets/navigation-logo/home-logo.png'
 import debtListLogo from '../../assets/navigation-logo/debt-list-logo.png'
 import inventoryLogo from '../../assets/navigation-logo/inventory-logo.png'
 import NavDisplay from '../../global-use/NavDisplay.jsx'
-import Welcome from '../Welcome.jsx'
 
 function Navigation() {
 
@@ -15,7 +14,7 @@ function Navigation() {
             <main>
                 <nav className={style.navBar}>
                     <div>
-                        <Link to="/home">
+                        <Link to="/">
                             <NavDisplay imageUrl={homeLogo} textName="Home" />
                         </Link>
                     </div>

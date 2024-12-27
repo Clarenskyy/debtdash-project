@@ -1,0 +1,34 @@
+.headerContainer{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #011638;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    display: flex;
+    height: 70px;
+    border-width: 1px;
+    justify-content: space-between;
+    z-index: 1000;
+    
+}
+.headerContainer div{
+    position: relative;
+    width: 100px;
+    height: 50px;
+    
+}
+
+.textLogo {
+    position: absolute;
+    height: 160px;
+    top: -90%;
+}
+
+.imageLogo{
+    height: 70px;
+    cursor: pointer;
+    
+}

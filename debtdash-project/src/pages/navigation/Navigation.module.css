@@ -1,0 +1,60 @@
+.navBar{
+    position: fixed;
+    left: 0px;
+    top: 70px;
+    bottom: 0px;
+    width: 70px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: #011638;
+    z-index: 1000;
+
+}
+.navBar div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    background-color: #011638;
+    width: 70px;
+    transition:  background-color .25s;
+    border-color: 3px solid #E8C1C5;
+    padding-bottom: 20px;
+}
+.navBar div:hover {
+
+}
+
+.navBar img{
+    margin: 10px;
+    top: 30px;
+    width: 60px;
+    opacity: 1;
+    
+    transition: opacity .25s,  width .25s, background-color .25s;
+    
+}
+.navBar div:hover img{
+    opacity: .6;
+}
+.navBar p {
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    top: 70%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    color: #E8C1C5;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 0;
+    transition: opacity .25s;
+    z-index: 100;
+}
+.navBar div:hover p {
+opacity: .7;
+}
+

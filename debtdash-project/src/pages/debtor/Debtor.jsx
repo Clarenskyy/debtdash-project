@@ -10,6 +10,7 @@ function Debtor() {
         const name = e.target.name.value;
         const contact = e.target.contact.value;
 
+        //get debt from backend
         setDebtors([
             ...debtors,
             { name, contact, totalBalance: 0, debts: [] },

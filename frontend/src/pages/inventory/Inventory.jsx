@@ -42,7 +42,7 @@ function Inventory() {
         <>
             <Navigation />
             <div className={styles.container}>
-                <h1 className={styles.heading}>INVENTORY LIST</h1>
+                <h1 className={styles.heading}>ITEM LIST</h1>
 
                 <div className={styles.listContainer}>
                     {renderForm ? (

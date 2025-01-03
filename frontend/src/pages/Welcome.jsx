@@ -8,15 +8,15 @@ function Welcome()  {
             <Navigation></Navigation>
             <div style={styles.container}>
                 <header style={styles.header}>
-                    <h1 style={styles.title}>Welcome to the Inventory & Debt Management System</h1>
+                    <h1 style={styles.title}>Welcome to the  Debt Management System</h1>
                 </header>
                 <main style={styles.main}>
                     <p style={styles.description}>
-                        Manage your inventory and track debts efficiently. Navigate to the respective sections below to get started.
+                        Manage and track debts efficiently. Navigate to the respective sections below to get started.
                     </p>
                     <div style={styles.navigation}>
                         <Link to="/inventory" style={styles.link}>
-                            <button style={styles.button}>Inventory Management</button>
+                            <button style={styles.button}>Item list</button>
                         </Link>
                         <Link to="/debt" style={styles.link}>
                             <button style={styles.button}>Debtor List</button>

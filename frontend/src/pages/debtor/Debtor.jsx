@@ -39,7 +39,7 @@ function Debtor() {
     return (
         <>
             <Navigation />
-            <div className={`${styles.container}`}>
+            <div className={styles.container}>
                 <div className={styles.content}>
                     <h1 className={styles.heading}>DEBTOR LIST</h1>
 

@@ -5,7 +5,7 @@ const {
   updateItem,
   deleteItem,
   searchAndSortItems,
-} = require("../controllers/inventoryController");
+} = require("../controllers/itemlistController");
 
 const router = express.Router();
 

@@ -14,6 +14,9 @@ app.use(express.json());
 // Routes
 app.use("/api/debt", debtRoutes);
 app.use("/api/inventory", itemListRoutes);
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 // Connect to MongoDB and start the server
 mongoose

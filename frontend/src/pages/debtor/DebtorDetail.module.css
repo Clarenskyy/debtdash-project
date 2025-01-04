@@ -1,0 +1,126 @@
+/* Container */
+.container {
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Heading */
+.heading {
+    font-size: 2.5rem;
+    color: #4A148C;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.button {
+    background-color: #9055A2;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.button:hover {
+    background-color: #D499B9;
+}
+
+.button:focus {
+    outline: none;
+}
+
+/* Form for Adding Debt */
+.debtForm {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #F3E5F5;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.debtForm h3 {
+    font-size: 1.8rem;
+    color: #4A148C;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.debtForm input[type="text"],
+.debtForm input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline-color: #4A148C;
+}
+
+/* Debt List */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+ul li {
+    background-color: #F3E5F5;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ul li p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Debt Date */
+ul li p span {
+    font-size: 0.9rem;
+    color: #6A1B9A;
+}
+
+/* Return to List Button */
+.returnButton {
+    background-color: #2E294E;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.returnButton:hover {
+    background-color: #4A148C;
+}
+
+.returnButton:focus {
+    outline: none;
+}
+
+/* Radio buttons for Debt Type */
+.debtForm label {
+    font-size: 1rem;
+    color: #4A148C;
+    margin-right: 20px;
+}
+
+.debtForm input[type="radio"] {
+    margin-right: 8px;
+}

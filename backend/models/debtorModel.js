@@ -18,7 +18,24 @@ const debtorSchema = new Schema(
       default: 0,
     },
     debts: {
-      type: [Object], // Expecting an array of debt objects
+      type: [
+        {
+          description: {
+            type: String,
+            required: [true, "Debt description is required"],
+            trim: true,
+          },
+          amount: {
+            type: Number,
+            required: [true, "Debt amount is required"],
+            min: [0, "Debt amount cannot be negative"],
+          },
+          date: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
       default: [],
     },
   },

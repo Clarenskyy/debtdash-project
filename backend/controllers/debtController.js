@@ -1,41 +1,88 @@
-const Debtor = require("../models/Debtor"); // Assuming a Debtor model exists
+const Debtor = require("../models/debtorModel");
+const Item = require("../models/itemlistModels");
 
-// Add Debt Controller
+// Fetch debtor details by ID
+const getDebtorById = async (req, res) => {
+  try {
+    const debtor = await Debtor.findById(req.params.id);
+    if (!debtor) {
+      return res.status(404).json({ message: "Debtor not found" });
+    }
+    res.status(200).json(debtor);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching debtor details" });
+  }
+};
+
+// Add Debt (from Inventory or Manual)
 const addDebt = async (req, res) => {
-  const debtorId = req.params.id;
-  const { description, amount, debtType } = req.body; // Get debt details from request body
+  const { id } = req.params;
+  const { debtType, description, amount } = req.body;
 
   try {
-    // Fetch debtor by ID
-    const debtor = await Debtor.findById(debtorId);
+    const debtor = await Debtor.findById(id);
     if (!debtor) {
       return res.status(404).json({ message: "Debtor not found" });
     }
 
-    // Create a new debt object
-    const newDebt = {
-      description,
-      amount,
-      date: new Date().toLocaleDateString(),
-    };
-
-    // Add the new debt to debtor's debts array
-    debtor.debts.push(newDebt);
-
-    // Update the debtor's total balance
-    debtor.totalBalance += amount;
-
-    // Save the debtor with updated data
-    await debtor.save();
-
-    // Return updated debtor details
-    res.status(200).json(debtor);
+    if (debtType === "inventory") {
+      const items = await Item.find(); // Fetch all items
+      return res.status(200).json({ items }); // Return items to the frontend for selection
+    } else if (debtType === "manual") {
+      const newDebt = {
+        description,
+        amount,
+        date: new Date().toLocaleDateString(),
+      };
+      debtor.debts.push(newDebt);
+      debtor.totalBalance += amount;
+      await debtor.save();
+      return res.status(200).json(debtor); // Return updated debtor
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error adding debt" });
   }
 };
 
+// Pay Debt (Full or Partial)
+const payDebt = async (req, res) => {
+  const { id } = req.params;
+  const { amountPaid } = req.body;
+
+  try {
+    const debtor = await Debtor.findById(id);
+    if (!debtor) {
+      return res.status(404).json({ message: "Debtor not found" });
+    }
+
+    if (amountPaid >= debtor.totalBalance) {
+      // Full payment logic
+      debtor.debts = []; // Clear all debts
+      debtor.totalBalance = 0; // Reset total balance
+    } else {
+      // Partial payment logic
+      const amount = (debtor.totalBalance -= amountPaid);
+      debtor.debts = [
+        {
+          description: "Balance",
+          amount: amount,
+          date: new Date().toLocaleDateString(),
+        },
+      ];
+    }
+    await debtor.save();
+
+    res.status(200).json(debtor);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error processing payment" });
+  }
+};
+
 module.exports = {
+  getDebtorById,
   addDebt,
+  payDebt,
 };

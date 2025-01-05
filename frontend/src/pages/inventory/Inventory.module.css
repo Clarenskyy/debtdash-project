@@ -117,13 +117,13 @@
 
 
 .listItem:hover {
-    background-color: #6A1B9A; 
-    color: white;
+    background-color: #d699fb; 
+    color: rgb(65, 0, 118);
 }
 .listItem p {
     transition: color 0.3s ease;
 }
 
 .listItem:hover p {
-    color: white;
+    color: rgb(65, 0, 118);
 }

@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const debtRoutes = require("./routes/debtor");
 const itemListRoutes = require("./routes/itemlist");
+const debtlistRoutes = require("./routes/debt");
 
 // Creates an Express app
 const app = express();
@@ -14,9 +15,7 @@ app.use(express.json());
 // Routes
 app.use("/api/debt", debtRoutes);
 app.use("/api/inventory", itemListRoutes);
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+app.use("/api/debtlist", debtlistRoutes);
 
 // Connect to MongoDB and start the server
 mongoose

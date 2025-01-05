@@ -8,32 +8,33 @@ function Debtor() {
     const [renderForm, setRenderForm] = useState(false); // State for form visibility
     const [searchQuery, setSearchQuery] = useState(""); // State for search
     const [newDebtor, setNewDebtor] = useState(null); // State for new debtor addition
+    const [loading, setLoading] = useState(true); // Loading state
 
-    // Fetch all debtors when the component mounts
     useEffect(() => {
         const fetchDebtors = async () => {
             try {
                 const response = await fetch('/api/debt');
-                const text = await response.text();  // Get raw response as text
-                console.log(text);  // Log the raw response to the console
-                const json = JSON.parse(text);  // Try parsing it as JSON manually
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const json = await response.json();
                 setDebtors(json);
             } catch (error) {
                 console.error('Error fetching debtors:', error.message);
+            } finally {
+                setLoading(false); // Set loading to false after fetch
             }
         };
-    
-        fetchDebtors();
-    }, []); // Runs once on mount
 
-    // Add new debtor to the state when a new one is added
+        fetchDebtors();
+    }, []);
+
     useEffect(() => {
         if (newDebtor) {
             setDebtors((prevDebtors) => [...prevDebtors, newDebtor]);
         }
-    }, [newDebtor]); // Runs whenever a new debtor is added
+    }, [newDebtor]);
 
-    // Function to handle adding a new debtor
     const addDebtor = async (e) => {
         e.preventDefault();
         const name = e.target.name.value;
@@ -51,29 +52,37 @@ function Debtor() {
             }
 
             const addedDebtor = await response.json();
-            setNewDebtor(addedDebtor); // Trigger useEffect to update the state
+            setNewDebtor(addedDebtor);
         } catch (error) {
             console.error('Error adding debtor:', error.message);
         }
 
-        e.target.reset(); // Reset form fields
-        setRenderForm(false); // Close the form
+        e.target.reset();
+        setRenderForm(false);
     };
 
-    // Function to toggle the form visibility
     const renderAddDebtor = () => {
         setRenderForm(!renderForm);
     };
 
-    // Function to handle search input
     const handleSearch = (e) => {
         setSearchQuery(e.target.value.toLowerCase());
     };
 
-    // Filtered debtors based on search query
     const filteredDebtors = debtors.filter((debtor) =>
         debtor.name.toLowerCase().includes(searchQuery)
     );
+
+    if (loading) {
+        return (
+            <>
+                <Navigation />
+                <div className={styles.container}>
+                    <p>Loading...</p>
+                </div>
+            </>
+        );
+    }
 
     return (
         <>
@@ -96,7 +105,9 @@ function Debtor() {
                     </div>
 
                     {renderForm && (
-                        <div className={`${styles.formOverlay} ${renderForm ? styles.blurBackground : null}`}>
+                        <div
+                            className={`${styles.bgContainer}`}
+                        >
                             <div className={styles.formContainer}>
                                 <h2 className={styles.subHeading}>Add Debtor</h2>
                                 <form onSubmit={addDebtor} className={styles.form}>
@@ -114,18 +125,16 @@ function Debtor() {
                                         required
                                         className={styles.input}
                                     />
-                                    <div className={styles.buttonGroup}>
-                                        <button type="submit" className={styles.button}>
+                                        <button type="submit" className={`${styles.button}`}>
                                             Add Debtor
                                         </button>
                                         <button
                                             type="button"
-                                            className={styles.button}
+                                            className={`${styles.button} `}
                                             onClick={renderAddDebtor}
                                         >
                                             Close Form
                                         </button>
-                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -138,11 +147,11 @@ function Debtor() {
                                 <p className={styles.noData}>No debtors found.</p>
                             ) : (
                                 filteredDebtors.map((debtor) => (
-                                    <Link to={`/debt/${debtor._id}`}>
-                                        <li key={debtor._id} className={styles.listItem}>
-                                        <h3>{debtor.name}</h3>
-                                        <p>Contact: {debtor.contact}</p>
-                                        <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
+                                    <Link to={`/debt/${debtor._id}`} key={debtor._id}>
+                                        <li className={styles.listItem}>
+                                            <h3>{debtor.name}</h3>
+                                            <p>Contact: {debtor.contact}</p>
+                                            <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
                                         </li>
                                     </Link>
                                 ))

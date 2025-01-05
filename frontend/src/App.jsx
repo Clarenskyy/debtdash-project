@@ -5,16 +5,28 @@ import Welcome from "./pages/Welcome.jsx";
 import DebtorDetail from './pages/debtor/DebtorDetail.jsx';
 
 function App() {
-  return (
-    <>
-      <Routes>
-        <Route index path='/' element={<Welcome />} />
-        <Route path='/debt' element={<Debtor />} />
-        <Route path='/debt/:id' element={<DebtorDetail />} /> 
-        <Route path='/inventory' element={<Inventory />} />
-      </Routes>
-    </>
-  );
+
+  const testingComponents = false;
+
+  if (testingComponents) {
+    return(
+      <>
+
+      </>
+    )
+  } else {
+    return (
+      <>
+        <Routes>
+          <Route index path='/' element={<Welcome />} />
+          <Route path='/debt' element={<Debtor />} />
+          <Route path='/debt/:id' element={<DebtorDetail />} /> 
+          <Route path='/inventory' element={<Inventory />} />
+        </Routes>
+      </>
+    );
+  }
+
 }
 
 export default App;

@@ -1,5 +1,6 @@
 /* Container */
 .container {
+    position: relative;    top: 70px;
     padding: 20px;
     font-family: 'Roboto', sans-serif;
     background-color: #F5F5F5;
@@ -10,6 +11,40 @@
     text-align: center;
 }
 
+.returnButton{
+    position: absolute;
+    top: 0px;
+    left: 25px;
+}
+
+.bgContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formOverlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
 /* Heading */
 .heading {
     font-size: 2.5rem;
@@ -17,35 +52,63 @@
     margin-bottom: 20px;
 }
 
-/* Buttons */
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.radioGroup label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #4A148C;
+}
+
+.input {
+    padding: 12px;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
 .button {
-    background-color: #9055A2;
+    padding: 12px;
+    margin-right: 10px;
+    background-color: #4A148C;
+    color: #FFFFFF;
     border: none;
     border-radius: 8px;
-    color: white;
-    padding: 12px 24px;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 15px;
-    margin-right: 10px;
+    transition: background-color 0.3s;
 }
 
 .button:hover {
-    background-color: #D499B9;
+    background-color: #6A1B9A;
 }
-
 .button:focus {
     outline: none;
 }
 
 /* Form for Adding Debt */
 .debtForm {
+    position: relative;
     margin-top: 30px;
     padding: 20px;
     background-color: #F3E5F5;
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    text-align: center;
+    z-index: 1010;
 }
 
 .debtForm h3 {

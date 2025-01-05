@@ -12,14 +12,14 @@ const getAllItems = async (req, res) => {
 
 // CREATE a new item
 const createItem = async (req, res) => {
-  const { name, price, quantity } = req.body;
+  const { name, price } = req.body;
 
-  if (!name || price == null || quantity == null) {
+  if (!name || price == null) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    const item = await Inventory.create({ name, price, quantity });
+    const item = await Inventory.create({ name, price });
     res.status(201).json(item);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -29,12 +29,12 @@ const createItem = async (req, res) => {
 // UPDATE an item by ID
 const updateItem = async (req, res) => {
   const { id } = req.params;
-  const { name, price, quantity } = req.body;
+  const { name, price } = req.body;
 
   try {
     const updatedItem = await Inventory.findByIdAndUpdate(
       id,
-      { name, price, quantity },
+      { name, price },
       { new: true, runValidators: true }
     );
     if (!updatedItem) {

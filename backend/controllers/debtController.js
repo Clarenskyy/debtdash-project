@@ -41,7 +41,7 @@ const addInventoryDebt = async (req, res) => {
       debtType: "inventory",
       itemId,
       quantity,
-      description: `${item.name} x${quantity}`,
+      description: `${item.name} * ${quantity}`,
       amount: total,
       date: new Date(),
     };

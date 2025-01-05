@@ -47,18 +47,22 @@ function Inventory() {
     };
 
     // Handle filter change and fetch filtered/sorted items
-    const handleFilterChange = async (e) => {
+    const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilters({ ...filters, [name]: value });
-
-        try {
-            const queryParams = new URLSearchParams(filters);
-            const response = await fetch(`/api/inventory/search?${queryParams}`);
-            const data = await response.json();
-            setItems(data);
-        } catch (error) {
-            console.error('Error filtering items:', error);
-        }
+    
+        // Update the filters state
+        setFilters((prevFilters) => {
+            const updatedFilters = { ...prevFilters, [name]: value };
+    
+            // Fetch updated items based on new filters
+            const queryParams = new URLSearchParams(updatedFilters).toString();
+            fetch(`/api/inventory/search?${queryParams}`)
+                .then((response) => response.json())
+                .then((data) => setItems(data))
+                .catch((error) => console.error('Error filtering items:', error));
+    
+            return updatedFilters; // Return the updated state
+        });
     };
 
     // Delete an item

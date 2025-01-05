@@ -15,10 +15,10 @@ const getDebtorById = async (req, res) => {
   }
 };
 
-// Add Debt (from Inventory or Manual)
-const addDebt = async (req, res) => {
+// Add inventory debt
+const addInventoryDebt = async (req, res) => {
   const { id } = req.params;
-  const { debtType, description, amount } = req.body;
+  const { description, amount, itemId, quantity } = req.body;
 
   try {
     const debtor = await Debtor.findById(id);
@@ -26,23 +26,67 @@ const addDebt = async (req, res) => {
       return res.status(404).json({ message: "Debtor not found" });
     }
 
-    if (debtType === "inventory") {
-      const items = await Item.find(); // Fetch all items
-      return res.status(200).json({ items }); // Return items to the frontend for selection
-    } else if (debtType === "manual") {
-      const newDebt = {
-        description,
-        amount,
-        date: new Date().toLocaleDateString(),
-      };
-      debtor.debts.push(newDebt);
-      debtor.totalBalance += amount;
-      await debtor.save();
-      return res.status(200).json(debtor); // Return updated debtor
+    const item = await Item.findById(itemId);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
     }
+
+    if (!quantity || quantity <= 0) {
+      return res.status(400).json({ message: "Invalid quantity" });
+    }
+
+    const total = item.price * quantity;
+
+    const newDebt = {
+      debtType: "inventory",
+      itemId,
+      quantity,
+      description: `${item.name} x${quantity}`,
+      amount: total,
+      date: new Date(),
+    };
+
+    debtor.debts.push(newDebt);
+    debtor.totalBalance += total;
+
+    await debtor.save();
+    return res.status(200).json(debtor);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error adding debt" });
+    console.error("Error adding inventory debt:", error);
+    res.status(500).json({ message: `Error adding debt: ${error.message}` });
+  }
+};
+
+// Add manual debt
+const addManualDebt = async (req, res) => {
+  const { id } = req.params;
+  const { description, amount } = req.body;
+
+  try {
+    const debtor = await Debtor.findById(id);
+    if (!debtor) {
+      return res.status(404).json({ message: "Debtor not found" });
+    }
+
+    if (amount <= 0) {
+      return res.status(400).json({ message: "Invalid amount" });
+    }
+
+    const newDebt = {
+      debtType: "manual",
+      description,
+      amount,
+      date: new Date(),
+    };
+
+    debtor.debts.push(newDebt);
+    debtor.totalBalance += amount;
+
+    await debtor.save();
+    return res.status(200).json(debtor);
+  } catch (error) {
+    console.error("Error adding manual debt:", error);
+    res.status(500).json({ message: `Error adding debt: ${error.message}` });
   }
 };
 
@@ -83,6 +127,7 @@ const payDebt = async (req, res) => {
 
 module.exports = {
   getDebtorById,
-  addDebt,
+  addInventoryDebt,
+  addManualDebt,
   payDebt,
 };

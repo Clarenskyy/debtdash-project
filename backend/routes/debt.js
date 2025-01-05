@@ -1,16 +1,22 @@
-// routes/debtRoutes.js
-
 const express = require("express");
 const router = express.Router();
-const debtController = require("../controllers/debtController");
+const {
+  getDebtorById,
+  addInventoryDebt,
+  addManualDebt,
+  payDebt,
+} = require("../controllers/debtController");
 
-// Route to fetch debtor details by ID
-router.get("/:id", debtController.getDebtorById);
+// Fetch debtor details by ID
+router.get("/:id", getDebtorById);
 
-// Route to add a debt (manual or inventory)
-router.post("/:id/debt", debtController.addDebt);
+// Add debt (inventory)
+router.post("/:id/debt/inventory", addInventoryDebt);
 
-// Route to pay debt (full or partial payment)
-router.post("/:id/pay", debtController.payDebt);
+// Add debt (manual)
+router.post("/:id/debt/manual", addManualDebt);
+
+// Pay debt (full or partial)
+router.post("/:id/pay", payDebt);
 
 module.exports = router;

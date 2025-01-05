@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Inventory = require("../models/itemlistModels"); // Import Inventory model
 
 const Schema = mongoose.Schema;
 
@@ -20,6 +21,16 @@ const debtorSchema = new Schema(
     debts: {
       type: [
         {
+          debtType: {
+            type: String,
+          },
+          itemId: {
+            type: mongoose.Schema.Types.ObjectId,
+          },
+          quantity: {
+            type: Number,
+            default: 1,
+          },
           description: {
             type: String,
             required: [true, "Debt description is required"],

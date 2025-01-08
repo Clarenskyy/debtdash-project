@@ -14,7 +14,7 @@ function Debtor() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    let userId;
+    let userId = localStorage.getItem("userId");
 
     useEffect(() => {
         if (!token) {

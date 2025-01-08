@@ -1,31 +1,42 @@
 import styles from './Debtor.module.css';
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Navigation from "../navigation/Navigation";
 import { Link } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";  // Corrected import for jwt-decode
+import {jwtDecode} from 'jwt-decode';
 
 function Debtor() {
     const [debtors, setDebtors] = useState([]);
     const [renderForm, setRenderForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [newDebtor, setNewDebtor] = useState(null);
-    const [editDebtor, setEditDebtor] = useState(null); // State for editing debtor
+    const [editDebtor, setEditDebtor] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    let userId;
 
-    // Get the user ID from the JWT token
-    const getUserIdFromToken = () => {
-        const token = localStorage.getItem('token');
-        if (!token) return null;
-        try {
-            const decodedToken = jwtDecode(token); // Use the named `decode` function
-            return decodedToken.id; // Assuming the user ID is stored as 'id' in the token
-        } catch (error) {
-            console.error('Error decoding token:', error);
-            return null;
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        } else {
+            try {
+                const decodedToken = jwtDecode(token);
+                const currentTime = Date.now() / 1000;
+                if (decodedToken.exp <= currentTime) {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                } else {
+                    userId = decodedToken.id;
+                    localStorage.setItem("userId", userId);
+                }
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                localStorage.removeItem("token");
+                navigate("/login");
+            }
         }
-    };
-
-    const userId = getUserIdFromToken(); // Retrieve user ID from token
+    }, [token, navigate]);
 
     useEffect(() => {
         const fetchDebtors = async () => {
@@ -35,7 +46,7 @@ function Debtor() {
             }
 
             try {
-                const response = await fetch(`/api/debt?userId=${userId}`); // Send the userId to the backend
+                const response = await fetch(`/api/debt/${userId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -62,19 +73,14 @@ function Debtor() {
         const name = e.target.name.value;
         const contact = e.target.contact.value;
 
-        if (!userId) {
-            console.error('User not authenticated');
-            return;
-        }
-
         try {
-            const response = await fetch('/api/debt', {
+            const response = await fetch(`/api/debt/${userId}`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Include the token in headers
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ name, contact, userId }), // Include userId in the request body
+                body: JSON.stringify({ name, contact }),
             });
 
             if (!response.ok) {
@@ -92,14 +98,12 @@ function Debtor() {
     };
 
     const deleteDebtor = async (id) => {
-        if (!userId) {
-            console.error('User not authenticated');
-            return;
-        }
-
         try {
-            const response = await fetch(`/api/debt/${id}?userId=${userId}`, {
+            const response = await fetch(`/api/debt/${userId}/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (response.ok) {
@@ -112,30 +116,18 @@ function Debtor() {
         }
     };
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value.toLowerCase());
-    };
-
-    const filteredDebtors = debtors.filter((debtor) =>
-        debtor.name.toLowerCase().includes(searchQuery)
-    );
-
-    const renderAddDebtor = () => setRenderForm(!renderForm);
-
-    const renderEditDebtor = (debtor) => setEditDebtor(debtor);
-
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         const updatedName = e.target.name.value;
 
         try {
-            const response = await fetch(`/api/debt/${editDebtor._id}?userId=${userId}`, {
+            const response = await fetch(`/api/debt/${userId}/${editDebtor._id}`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ name: updatedName, userId }), // Include userId in the request
+                body: JSON.stringify({ name: updatedName }),
             });
 
             if (response.ok) {
@@ -149,6 +141,14 @@ function Debtor() {
             console.error('Error updating debtor:', error.message);
         }
     };
+
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+    };
+
+    const filteredDebtors = debtors.filter((debtor) =>
+        debtor.name.toLowerCase().includes(searchQuery)
+    );
 
     if (loading) {
         return (
@@ -176,103 +176,71 @@ function Debtor() {
                             value={searchQuery}
                             onChange={handleSearch}
                         />
-                        <button className={styles.button} onClick={renderAddDebtor}>
+                        <button className={styles.button} onClick={() => setRenderForm(!renderForm)}>
                             Add Debtor
                         </button>
                     </div>
 
                     {renderForm && (
-                        <div className={`${styles.bgContainer}`}>
-                            <div className={styles.formContainer}>
-                                <h2 className={styles.subHeading}>Add Debtor</h2>
-                                <form onSubmit={addDebtor} className={styles.form}>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Debtor Name"
-                                        required
-                                        className={styles.input}
-                                    />
-                                    <input
-                                        type="text"
-                                        name="contact"
-                                        placeholder="Contact Information"
-                                        required
-                                        className={styles.input}
-                                    />
-                                    <button type="submit" className={`${styles.button}`}>
-                                        Add Debtor
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={`${styles.button}`}
-                                        onClick={renderAddDebtor}
-                                    >
-                                        Close Form
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                        <form onSubmit={addDebtor} className={styles.form}>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Debtor Name"
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="text"
+                                name="contact"
+                                placeholder="Contact Information"
+                                required
+                                className={styles.input}
+                            />
+                            <button type="submit" className={styles.button}>
+                                Add
+                            </button>
+                        </form>
                     )}
 
                     {editDebtor && (
-                        <div className={styles.bgContainer}>
-                            <div className={styles.formContainer}>
-                                <h2 className={styles.subHeading}>Edit Debtor</h2>
-                                <form onSubmit={handleEditSubmit} className={styles.form}>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Edit Debtor Name"
-                                        defaultValue={editDebtor.name}
-                                        required
-                                        className={styles.input}
-                                    />
-                                    <button type="submit" className={styles.button}>
-                                        Save Changes
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className={styles.button}
-                                        onClick={() => setEditDebtor(null)}
-                                    >
-                                        Cancel
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                        <form onSubmit={handleEditSubmit} className={styles.form}>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Edit Debtor Name"
+                                defaultValue={editDebtor.name}
+                                required
+                                className={styles.input}
+                            />
+                            <button type="submit" className={styles.button}>
+                                Save
+                            </button>
+                        </form>
                     )}
 
-                    <div className={styles.listContainer}>
-                        <h2 className={styles.subHeading}>Debtor List</h2>
-                        <ul className={styles.list}>
-                            {filteredDebtors.length === 0 ? (
-                                <p className={styles.noData}>No debtors found.</p>
-                            ) : (
-                                filteredDebtors.map((debtor) => (
-                                    <li key={debtor._id} className={styles.listItem}>
-                                        <Link to={`/debt/${debtor._id}`} key={debtor._id}>
-                                            <h3>{debtor.name}</h3>
-                                            <p>Contact: {debtor.contact}</p>
-                                            <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
-                                        </Link>
-                                        <button
-                                            className={styles.button}
-                                            onClick={() => renderEditDebtor(debtor)}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            className={styles.button}
-                                            onClick={() => deleteDebtor(debtor._id)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </li>
-                                ))
-                            )}
-                        </ul>
-                    </div>
+                    <ul className={styles.list}>
+                        {filteredDebtors.map((debtor) => (
+                            <li key={debtor._id} className={styles.listItem}>
+                                <Link to={`/debt/${debtor._id}`}>
+                                    <h3>{debtor.name}</h3>
+                                    <p>Contact: {debtor.contact}</p>
+                                </Link>
+                                <button
+                                    className={styles.button}
+                                    onClick={() => setEditDebtor(debtor)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className={styles.button}
+                                    onClick={() => deleteDebtor(debtor._id)}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import {jwtDecode} from "jwt-decode";  // Correct import for jwt-decode
+import {jwtDecode} from "jwt-decode";  
+import txtLogo from "../../assets/logo/text-logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -71,6 +72,9 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      <div>
+        <img src={txtLogo} className={styles.txtLogo} />
+      </div>
       <div className={styles.formContainer}>
         <h2 className={styles.heading}>Login</h2>
         <form onSubmit={handleLogin}>

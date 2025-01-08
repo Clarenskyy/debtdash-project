@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Signup.module.css";
+import txtLogo from "../../assets/logo/text-logo.png";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -33,6 +34,9 @@ const Signup = () => {
 
   return (
     <div className={styles.container}>
+      <div>
+        <img src={txtLogo} className={styles.txtLogo} />
+      </div>
       <div className={styles.formContainer}>
         <h2 className={styles.heading}>Signup</h2>
         <form onSubmit={handleSignup}>

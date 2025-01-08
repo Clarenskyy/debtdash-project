@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const inventorySchema = new mongoose.Schema(
+const inventorySchema = new Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -15,7 +20,7 @@ const inventorySchema = new mongoose.Schema(
       min: 0,
     },
   },
-  { collection: "inventories" }
-); // Explicitly specify the collection name
+  { collection: "inventories" } // Explicitly specify the collection name
+);
 
 module.exports = mongoose.model("Inventory", inventorySchema);

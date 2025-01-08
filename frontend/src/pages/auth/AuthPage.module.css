@@ -1,0 +1,110 @@
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #011638;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+    animation: logoBounce 1.5s infinite;
+}
+
+.heading {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+    animation: slideInFromLeft 1s ease-in-out;
+}
+
+.description {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    max-width: 500px;
+    line-height: 1.6;
+    animation: slideInFromRight 1s ease-in-out;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+    animation: fadeInButtons 1s ease-in-out;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.button {
+    background-color: #9055A2;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 25px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    background-color: #D499B9;
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes logoBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInButtons {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

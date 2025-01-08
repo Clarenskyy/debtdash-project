@@ -1,29 +1,32 @@
-import Navigation from './navigation/Navigation'
+import Navigation from '../navigation/Navigation';
 import React from "react";
 import { Link } from "react-router-dom";
+import imageLogo from '../../assets/logo/image-logo.png';
+import './Welcome.css'; // Import the CSS file for animations
 
 function Welcome()  {
     return (
         <>
             <Navigation />
-            <div style={styles.container}>
-                <header style={styles.header}>
-                    <h1 style={styles.title}>Welcome to the Debt Management System</h1>
+            <div className="animated-container" style={styles.container}>
+                <header className="animated-header" style={styles.header}>
+                    <h1 className="animated-title" style={styles.title}>Welcome to the Debt Management System</h1>
                 </header>
-                <main style={styles.main}>
-                    <p style={styles.description}>
+                <main className="animated-main" style={styles.main}>
+                    <img src={imageLogo} alt="" className="animated-logo logo" />
+                    <p className="animated-description" style={styles.description}>
                         Manage and track debts efficiently. Navigate to the respective sections below to get started.
                     </p>
-                    <div style={styles.navigation}>
-                        <Link to="/inventory" style={styles.link}>
-                            <button style={styles.button}>Item List</button>
+                    <div className="animated-navigation" style={styles.navigation}>
+                        <Link to="/inventory" className="animated-link" style={styles.link}>
+                            <button className="animated-button" style={styles.button}>Item List</button>
                         </Link>
-                        <Link to="/debt" style={styles.link}>
-                            <button style={styles.button}>Debtor List</button>
+                        <Link to="/debt" className="animated-link" style={styles.link}>
+                            <button className="animated-button" style={styles.button}>Debtor List</button>
                         </Link>
                     </div>
                 </main>
-                <footer style={styles.footer}>
+                <footer className="animated-footer" style={styles.footer}>
                     <p>&copy; 2024 Inventory & Debt Management System</p>
                 </footer>
             </div>
@@ -90,7 +93,7 @@ const styles = {
         padding: "15px 30px",
         fontSize: "1.2rem", 
         cursor: "pointer",
-        transition: "background-color 0.3s ease", 
+        transition: "background-color 0.3s ease, transform 0.2s ease", 
     },
     buttonHover: {
         backgroundColor: "#D499B9",

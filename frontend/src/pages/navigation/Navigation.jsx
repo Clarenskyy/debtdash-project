@@ -14,7 +14,7 @@ function Navigation() {
             <main>
                 <nav className={style.navBar}>
                     <div>
-                        <Link to="/">
+                        <Link to="/home">
                             <NavDisplay imageUrl={homeLogo} textName="Home" />
                         </Link>
                     </div>

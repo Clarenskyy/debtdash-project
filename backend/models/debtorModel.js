@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
-const Inventory = require("../models/itemlistModels"); // Import Inventory model
 
 const Schema = mongoose.Schema;
 
 const debtorSchema = new Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+      required: true,
+    },
     name: {
       type: String,
       required: [true, "Name is required"],
@@ -26,6 +30,7 @@ const debtorSchema = new Schema(
           },
           itemId: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Inventory", // Reference to the Inventory model
           },
           quantity: {
             type: Number,

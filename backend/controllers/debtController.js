@@ -1,27 +1,29 @@
 const Debtor = require("../models/debtorModel");
 const Item = require("../models/itemlistModels");
 
-// Fetch debtor details by ID
+// Fetch debtor details by ID for a specific user
 const getDebtorById = async (req, res) => {
+  const { userId, id } = req.params;
+
   try {
-    const debtor = await Debtor.findById(req.params.id);
+    const debtor = await Debtor.findOne({ _id: id, userId });
     if (!debtor) {
       return res.status(404).json({ message: "Debtor not found" });
     }
     res.status(200).json(debtor);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching debtor details:", error);
     res.status(500).json({ message: "Error fetching debtor details" });
   }
 };
 
-// Add inventory debt
+// Add inventory debt for a specific user
 const addInventoryDebt = async (req, res) => {
-  const { id } = req.params;
+  const { userId, id } = req.params;
   const { description, amount, itemId, quantity } = req.body;
 
   try {
-    const debtor = await Debtor.findById(id);
+    const debtor = await Debtor.findOne({ _id: id, userId });
     if (!debtor) {
       return res.status(404).json({ message: "Debtor not found" });
     }
@@ -57,13 +59,13 @@ const addInventoryDebt = async (req, res) => {
   }
 };
 
-// Add manual debt
+// Add manual debt for a specific user
 const addManualDebt = async (req, res) => {
-  const { id } = req.params;
+  const { userId, id } = req.params;
   const { description, amount } = req.body;
 
   try {
-    const debtor = await Debtor.findById(id);
+    const debtor = await Debtor.findOne({ _id: id, userId });
     if (!debtor) {
       return res.status(404).json({ message: "Debtor not found" });
     }
@@ -90,13 +92,13 @@ const addManualDebt = async (req, res) => {
   }
 };
 
-// Pay Debt (Full or Partial)
+// Pay Debt (Full or Partial) for a specific user
 const payDebt = async (req, res) => {
-  const { id } = req.params;
+  const { userId, id } = req.params;
   const { amountPaid } = req.body;
 
   try {
-    const debtor = await Debtor.findById(id);
+    const debtor = await Debtor.findOne({ _id: id, userId });
     if (!debtor) {
       return res.status(404).json({ message: "Debtor not found" });
     }
@@ -110,9 +112,9 @@ const payDebt = async (req, res) => {
       const amount = (debtor.totalBalance -= amountPaid);
       debtor.debts = [
         {
-          description: "Balance",
+          description: "Remaining Balance",
           amount: amount,
-          date: new Date().toLocaleDateString(),
+          date: new Date(),
         },
       ];
     }
@@ -120,7 +122,7 @@ const payDebt = async (req, res) => {
 
     res.status(200).json(debtor);
   } catch (error) {
-    console.error(error);
+    console.error("Error processing payment:", error);
     res.status(500).json({ message: "Error processing payment" });
   }
 };

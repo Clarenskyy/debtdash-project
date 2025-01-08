@@ -1,29 +1,50 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 import Navigation from "../../components/navigation/Navigation";
-import styles from './DebtorDetail.module.css';
+import styles from "./DebtorDetail.module.css";
 
 function DebtorDetail() {
     const { id } = useParams();
     const [debtor, setDebtor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isDebtAdding, setIsDebtAdding] = useState(false);
-    const [debtType, setDebtType] = useState(""); // For inventory or manual debt
-    const [description, setDescription] = useState(""); // Description of the debt
-    const [amount, setAmount] = useState(0); // Amount of the debt
-    const [quantities, setQuantities] = useState({}); 
-    const [paymentAmount, setPaymentAmount] = useState(0); // Amount for payments
-    const [isPayingDebt, setIsPayingDebt] = useState(false); // To show/hide payment form
-    const [inventoryItems, setInventoryItems] = useState([]); // State to hold inventory items
-    const navigate = useNavigate(); // Navigation hook
+    const [debtType, setDebtType] = useState(""); // "inventory" or "manual"
+    const [description, setDescription] = useState("");
+    const [amount, setAmount] = useState(0);
+    const [quantities, setQuantities] = useState({});
+    const [paymentAmount, setPaymentAmount] = useState(0);
+    const [isPayingDebt, setIsPayingDebt] = useState(false);
+    const [inventoryItems, setInventoryItems] = useState([]);
+    const navigate = useNavigate();
+    let userId = localStorage.getItem("userId");
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+        try {
+            const decodedToken = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+            if (decodedToken.exp <= currentTime) {
+                localStorage.removeItem("token");
+                navigate("/login");
+            } else {
+                localStorage.setItem("userId", decodedToken.id);
+            }
+        } catch {
+            localStorage.removeItem("token");
+            navigate("/login");
+        }
+    }, [navigate]);
 
     useEffect(() => {
         const fetchDebtor = async () => {
             try {
-                const response = await fetch(`/api/debt/${id}`);
-                if (!response.ok) {
-                    throw new Error('Error fetching debtor details');
-                }
+                const response = await fetch(`/api/debt/${userId}/${id}`);
+                if (!response.ok) throw new Error("Error fetching debtor details");
                 const data = await response.json();
                 setDebtor(data);
             } catch (error) {
@@ -38,111 +59,81 @@ function DebtorDetail() {
     useEffect(() => {
         const fetchInventoryItems = async () => {
             try {
-                const response = await fetch('/api/inventory'); // Adjust the URL to your endpoint
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json(); // Parse the JSON response
-                setInventoryItems(data); // Set inventory data to the state
+                const response = await fetch(`/api/inventory/${userId}`);
+                if (!response.ok) throw new Error("Error fetching inventory items");
+                const data = await response.json();
+                setInventoryItems(data);
             } catch (error) {
-                console.error('Error fetching inventory items:', error);
-            } finally {
-                setLoading(false); // Set loading to false after the fetch is complete
+                console.error(error);
             }
         };
-
         fetchInventoryItems();
-    }, []); // Empty dependency array to run only once when the component mounts
+    }, []);
 
-    // Handle adding debt (POST request)
     const handleAddDebt = async () => {
+        if (!description || amount <= 0) {
+            alert("Please provide a valid description and amount.");
+            return;
+        }
         try {
-            if (!description || amount <= 0) {
-                alert("Please provide a description and amount.");
-                return;
-            }
-
-            const response = await fetch(`/api/debtlist/${id}/debt/manual`, {
+            const response = await fetch(`/api/debtlist/${userId}/${id}/debt/manual`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    debtType,
-                    description,
-                    amount,
-                }),
+                body: JSON.stringify({ description, amount }),
             });
-
             if (!response.ok) throw new Error("Error adding manual debt");
-
             const updatedDebtor = await response.json();
             setDebtor(updatedDebtor);
         } catch (error) {
             console.error(error);
         }
-
-        setIsDebtAdding(false); // Close the debt form
+        setIsDebtAdding(false);
     };
 
     const handleAddInventoryItem = async (item) => {
         const quantity = quantities[item._id] || 1;
-        const total = quantity * item.price;
-
+        if (quantity <= 0) {
+            alert("Quantity must be greater than zero.");
+            return;
+        }
         try {
-            const response = await fetch(`/api/debtlist/${id}/debt/inventory`, {
+            const response = await fetch(`/api/debtlist/${userId}/${id}/debt/inventory`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    debtType: "inventory",
-                    description: `${item.name} - ${quantity}`,
-                    amount: total,
                     itemId: item._id,
-                    quantity: quantity,
+                    quantity,
                 }),
             });
-
-            if (!response.ok) throw new Error("Error adding inventory item to debt");
-
+            if (!response.ok) throw new Error("Error adding inventory debt");
             const updatedDebtor = await response.json();
             setDebtor(updatedDebtor);
-            setQuantities({ ...quantities, [item._id]: 0 }); // Reset quantity after adding
+            setQuantities({ ...quantities, [item._id]: 0 });
         } catch (error) {
-            console.error("Error adding inventory item:", error);
+            console.error(error);
         }
-    };
-
-    // Handle paying debt (full or partial)
-    const handlePayDebt = () => {
-        setIsPayingDebt(true);
     };
 
     const handlePayment = async (fullPayment = false) => {
         const paymentData = fullPayment
-            ? { amountPaid: debtor.totalBalance } // Full payment clears all debts
-            : { amountPaid: paymentAmount }; // Partial payment
-
+            ? { amountPaid: debtor.totalBalance }
+            : { amountPaid: paymentAmount };
         try {
-            const response = await fetch(`/api/debtlist/${id}/pay`, {
+            const response = await fetch(`/api/debtlist/${userId}/${id}/pay`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(paymentData),
             });
-
-            if (!response.ok) throw new Error("Error making payment");
-
+            if (!response.ok) throw new Error("Error processing payment");
             const updatedDebtor = await response.json();
-            setDebtor(updatedDebtor); // Update the state with cleared debts or partial payment
-
-            if (!fullPayment) {
-                setPaymentAmount(0); // Clear the input after partial payment
-            }
+            setDebtor(updatedDebtor);
         } catch (error) {
             console.error(error);
         }
-
-        setIsPayingDebt(false); // Close the payment form
+        setIsPayingDebt(false);
+        setPaymentAmount(0);
     };
 
-    // Return to debtor list
     const handleReturnToList = () => {
         navigate("/debt");
     };
@@ -169,7 +160,9 @@ function DebtorDetail() {
         <>
             <Navigation />
             <div className={styles.container}>
-                <button onClick={handleReturnToList} className={`${styles.button} ${styles.returnButton}`}>Return to Debtor List</button>
+                <button onClick={handleReturnToList} className={`${styles.button} ${styles.returnButton}`}>
+                    Return to Debtor List
+                </button>
                 <h1 className={styles.heading}>{debtor.name}</h1>
                 <p>Contact: {debtor.contact}</p>
 
@@ -182,13 +175,15 @@ function DebtorDetail() {
                             <li key={index}>
                                 <p>
                                     {debt.description}: {debt.amount.toFixed(2)}
-                                    <br /> 
-                                    (Added on: {new Date(debt.date).toLocaleString("en-US", {
-                                        month: "short", // Short month name (e.g., Jan, Feb)
-                                        day: "2-digit", // Day with leading zero
-                                        year: "numeric", // Full year
-                                        hour12: false, // Use 24-hour format (set to `true` for 12-hour with AM/PM)
-                                    })})
+                                    <br />
+                                    (Added on:{" "}
+                                    {new Date(debt.date).toLocaleString("en-US", {
+                                        month: "short",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                        hour12: false,
+                                    })}
+                                    )
                                 </p>
                             </li>
                         ))
@@ -197,7 +192,9 @@ function DebtorDetail() {
 
                 <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
 
-                <button onClick={() => setIsDebtAdding(true)} className={styles.button}>Add Debt</button>
+                <button onClick={() => setIsDebtAdding(true)} className={styles.button}>
+                    Add Debt
+                </button>
 
                 {isDebtAdding && (
                     <div className={styles.bgContainer}>
@@ -211,7 +208,8 @@ function DebtorDetail() {
                                             value="inventory"
                                             checked={debtType === "inventory"}
                                             onChange={() => setDebtType("inventory")}
-                                        /> Take Item from Inventory
+                                        />{" "}
+                                        Take Item from Inventory
                                     </label>
                                     <label>
                                         <input
@@ -219,7 +217,8 @@ function DebtorDetail() {
                                             value="manual"
                                             checked={debtType === "manual"}
                                             onChange={() => setDebtType("manual")}
-                                        /> Manually Add Product
+                                        />{" "}
+                                        Manually Add Product
                                     </label>
                                 </div>
 
@@ -229,7 +228,9 @@ function DebtorDetail() {
                                         <ul>
                                             {inventoryItems.map((item, index) => (
                                                 <li key={index}>
-                                                    <span>{item.name} - {item.price.toFixed(2)}</span>
+                                                    <span>
+                                                        {item.name} - {item.price.toFixed(2)}
+                                                    </span>
                                                     <input
                                                         type="number"
                                                         placeholder="Quantity"
@@ -261,26 +262,13 @@ function DebtorDetail() {
                                             placeholder="Product Description"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter" && description.trim()) {
-                                                    document.getElementById("amountInput").focus();
-                                                }
-                                            }}
                                             className={styles.input}
                                         />
                                         <input
-                                            id="amountInput"
                                             type="number"
                                             placeholder="Amount"
                                             value={amount === 0 ? "" : amount}
                                             onChange={(e) => setAmount(Number(e.target.value))}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter" && amount > 0) {
-                                                    handleAddDebt();
-                                                    setDescription(""); // Clear description
-                                                    setAmount(0); // Reset amount
-                                                }
-                                            }}
                                             className={styles.input}
                                         />
                                     </div>
@@ -323,38 +311,23 @@ function DebtorDetail() {
                                     placeholder="Amount Paid"
                                     value={paymentAmount === 0 ? "" : paymentAmount}
                                     onChange={(e) => setPaymentAmount(Number(e.target.value))}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" && paymentAmount > 0) {
-                                            handlePayment(false); // Pay Partial
-                                            setPaymentAmount(0); // Clear input
-                                        }
-                                    }}
                                     className={styles.input}
                                 />
                                 <div className={styles.buttonGroup}>
                                     <button
-                                        onClick={() => {
-                                            handlePayment(false);
-                                            setPaymentAmount(0); // Clear input
-                                        }}
+                                        onClick={() => handlePayment(false)}
                                         className={styles.button}
                                     >
                                         Pay Partial
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            handlePayment(true);
-                                            setPaymentAmount(0); // Clear input
-                                        }}
+                                        onClick={() => handlePayment(true)}
                                         className={styles.button}
                                     >
                                         Pay All
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            setIsPayingDebt(false);
-                                            setPaymentAmount(0); // Clear input
-                                        }}
+                                        onClick={() => setIsPayingDebt(false)}
                                         className={styles.button}
                                     >
                                         Close
@@ -365,7 +338,9 @@ function DebtorDetail() {
                     </div>
                 )}
 
-                <button onClick={handlePayDebt} className={styles.button}>Pay Debt</button>
+                <button onClick={() => setIsPayingDebt(true)} className={styles.button}>
+                    Pay Debt
+                </button>
             </div>
         </>
     );

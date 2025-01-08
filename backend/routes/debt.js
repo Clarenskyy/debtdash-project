@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const {
   getDebtorById,
   addInventoryDebt,
@@ -7,16 +6,18 @@ const {
   payDebt,
 } = require("../controllers/debtController");
 
-// Fetch debtor details by ID
-router.get("/:id", getDebtorById);
+const router = express.Router();
 
-// Add debt (inventory)
-router.post("/:id/debt/inventory", addInventoryDebt);
+// Fetch debtor details by ID for a specific user
+router.get("/:userId/:id", getDebtorById);
 
-// Add debt (manual)
-router.post("/:id/debt/manual", addManualDebt);
+// Add debt (inventory) for a specific user
+router.post("/:userId/:id/debt/inventory", addInventoryDebt);
 
-// Pay debt (full or partial)
-router.post("/:id/pay", payDebt);
+// Add debt (manual) for a specific user
+router.post("/:userId/:id/debt/manual", addManualDebt);
+
+// Pay debt (full or partial) for a specific user
+router.post("/:userId/:id/pay", payDebt);
 
 module.exports = router;

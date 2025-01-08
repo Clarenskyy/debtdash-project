@@ -4,8 +4,8 @@ import Debtor from "./pages/debtor/Debtor.jsx";
 import Inventory from './pages/inventory/Inventory.jsx';
 import Welcome from "./pages/welcome/Welcome.jsx";
 import DebtorDetail from './pages/debtor/DebtorDetail.jsx';
-import Login from './components/login/login.jsx';
-import Signup from './components/signup/signup.jsx';
+import Login from './pages/login/login.jsx';
+import Signup from './pages/signup/signup.jsx';
 import AuthPage from './pages/auth/AuthPage.jsx';
 
 

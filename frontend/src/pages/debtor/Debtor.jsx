@@ -12,6 +12,7 @@ function Debtor() {
     const [newDebtor, setNewDebtor] = useState(null);
     const [editDebtor, setEditDebtor] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [fadeIn, setFadeIn] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     let userId = localStorage.getItem("userId");
@@ -52,6 +53,7 @@ function Debtor() {
                 }
                 const json = await response.json();
                 setDebtors(json);
+                setFadeIn(true);
             } catch (error) {
                 console.error('Error fetching debtors:', error.message);
             } finally {
@@ -65,6 +67,7 @@ function Debtor() {
     useEffect(() => {
         if (newDebtor) {
             setDebtors((prevDebtors) => [...prevDebtors, newDebtor]);
+            setFadeIn(true);
         }
     }, [newDebtor]);
 
@@ -182,7 +185,9 @@ function Debtor() {
                     </div>
 
                     {renderForm && (
-                        <form onSubmit={addDebtor} className={styles.form}>
+                        <div className={styles.bgContainer}>
+                            <div className={styles.formContainer}>
+                            <form onSubmit={addDebtor} className={styles.form}>
                             <input
                                 type="text"
                                 name="name"
@@ -200,11 +205,16 @@ function Debtor() {
                             <button type="submit" className={styles.button}>
                                 Add
                             </button>
-                        </form>
+                            </form>
+                            </div>
+                        </div>
+                       
                     )}
 
                     {editDebtor && (
-                        <form onSubmit={handleEditSubmit} className={styles.form}>
+                        <div className={styles.bgContainer}>
+                            <div className={styles.formContainer}>
+                            <form onSubmit={handleEditSubmit} className={styles.form}>
                             <input
                                 type="text"
                                 name="name"
@@ -216,13 +226,16 @@ function Debtor() {
                             <button type="submit" className={styles.button}>
                                 Save
                             </button>
-                        </form>
+                            </form>
+                            </div>
+                        </div>
+
                     )}
 
-                    <ul className={styles.list}>
+                    <ul className={`${styles.list} ${fadeIn ? styles.fadeIn : ''}`}>
                         {filteredDebtors.map((debtor) => (
-                            <li key={debtor._id} className={styles.listItem}>
-                                <Link to={`/debt/${debtor._id}`}>
+                            <li key={debtor._id} className={styles.card}>
+                                <Link to={`/debt/${debtor._id}`} className={styles.link}>
                                     <h3>{debtor.name}</h3>
                                     <p>Contact: {debtor.contact}</p>
                                 </Link>

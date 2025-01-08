@@ -1,6 +1,7 @@
 /* Container */
 .container {
-    position: relative;    top: 70px;
+    position: relative;
+    top: 70px;
     padding: 20px;
     font-family: 'Roboto', sans-serif;
     background-color: #F5F5F5;
@@ -11,11 +12,12 @@
     text-align: center;
 }
 
-.returnButton{
+.returnButton {
     position: absolute;
     top: 0px;
     left: 25px;
 }
+
 
 .bgContainer {
     position: fixed;
@@ -29,6 +31,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.bgContainer.show {
+    opacity: 1;
+    visibility: visible;
 }
 
 .formOverlay {
@@ -43,6 +53,14 @@
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.bgContainer.show .formOverlay {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 /* Heading */
@@ -98,7 +116,7 @@
     outline: none;
 }
 
-/* Form for Adding Debt */
+
 .debtForm {
     position: relative;
     margin-top: 30px;
@@ -117,7 +135,7 @@
     margin-bottom: 20px;
 }
 
-/* Input Fields */
+
 .debtForm input[type="text"],
 .debtForm input[type="number"] {
     width: 100%;
@@ -129,7 +147,7 @@
     outline-color: #4A148C;
 }
 
-/* Debt List */
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -150,13 +168,13 @@ ul li p {
     color: #333;
 }
 
-/* Debt Date */
+
 ul li p span {
     font-size: 0.9rem;
     color: #6A1B9A;
 }
 
-/* Return to List Button */
+
 .returnButton {
     background-color: #2E294E;
     border: none;
@@ -177,7 +195,6 @@ ul li p span {
     outline: none;
 }
 
-/* Radio buttons for Debt Type */
 .debtForm label {
     font-size: 1rem;
     color: #4A148C;

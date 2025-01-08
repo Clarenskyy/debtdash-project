@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navigation from "../navigation/Navigation";
+import Navigation from "../../components/navigation/Navigation";
 import styles from './DebtorDetail.module.css';
 
 function DebtorDetail() {

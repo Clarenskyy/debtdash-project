@@ -1,7 +1,7 @@
 import styles from './Inventory.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '../navigation/Navigation';
+import Navigation from "../../components/navigation/Navigation";
 import {jwtDecode} from "jwt-decode"; 
 
 function Inventory() {

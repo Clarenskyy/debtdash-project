@@ -1,4 +1,4 @@
-import Navigation from '../navigation/Navigation';
+import Navigation from "../../components/navigation/Navigation";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import imageLogo from '../../assets/logo/image-logo.png';

@@ -1,10 +1,10 @@
 import { Outlet, Link, NavLink } from 'react-router-dom'
-import Header from '../../components/header/Header.jsx'
+import Header from '../header/Header.jsx'
 import style from './Navigation.module.css'
 import homeLogo from '../../assets/navigation-logo/home-logo.png'
 import debtListLogo from '../../assets/navigation-logo/debt-list-logo.png'
 import inventoryLogo from '../../assets/navigation-logo/inventory-logo.png'
-import NavDisplay from '../../components/global-use/NavDisplay.jsx'
+import NavDisplay from '../global-use/NavDisplay.jsx'
 
 function Navigation() {
 

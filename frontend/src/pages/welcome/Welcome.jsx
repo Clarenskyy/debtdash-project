@@ -1,10 +1,17 @@
 import Navigation from '../navigation/Navigation';
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import imageLogo from '../../assets/logo/image-logo.png';
 import './Welcome.css'; // Import the CSS file for animations
 
-function Welcome()  {
+function Welcome() {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove the token from local storage
+        navigate('/'); // Redirect to the authentication page
+    };
+
     return (
         <>
             <Navigation />
@@ -24,11 +31,11 @@ function Welcome()  {
                         <Link to="/debt" className="animated-link" style={styles.link}>
                             <button className="animated-button" style={styles.button}>Debtor List</button>
                         </Link>
+                        <button className="animated-button" style={styles.button} onClick={handleLogout}>
+                            Logout
+                        </button>
                     </div>
                 </main>
-                <footer className="animated-footer" style={styles.footer}>
-                    <p>&copy; 2024 Inventory & Debt Management System</p>
-                </footer>
             </div>
         </>
     );

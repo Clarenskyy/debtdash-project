@@ -1,5 +1,5 @@
-import textLogo from '../assets/logo/text-logo.png';
-import imageLogo from '../assets/logo/image-logo.png';
+import textLogo from '../../assets/logo/text-logo.png';
+import imageLogo from '../../assets/logo/image-logo.png';
 import style from './Header.module.css';
 
 function Header() {

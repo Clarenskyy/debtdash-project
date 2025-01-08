@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  getAllItems,
+  getItemsByUser,
   createItem,
   updateItem,
   deleteItem,
@@ -9,19 +9,19 @@ const {
 
 const router = express.Router();
 
-// GET all items
-router.get("/", getAllItems);
+// GET all items for a specific user
+router.get("/:userId", getItemsByUser);
 
-// SEARCH and SORT items
-router.get("/search", searchAndSortItems);
+// SEARCH and SORT items for a specific user
+router.get("/search/:userId", searchAndSortItems);
 
-// CREATE a new item
-router.post("/", createItem);
+// CREATE a new item for a specific user
+router.post("/:userId", createItem);
 
-// UPDATE an item by ID
-router.put("/:id", updateItem);
+// UPDATE an item by ID for a specific user
+router.put("/:userId/:id", updateItem);
 
-// DELETE an item by ID
-router.delete("/:id", deleteItem);
+// DELETE an item by ID for a specific user
+router.delete("/:userId/:id", deleteItem);
 
 module.exports = router;

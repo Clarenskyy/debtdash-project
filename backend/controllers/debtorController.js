@@ -32,14 +32,14 @@ const getDebtorById = async (req, res) => {
 
 // CREATE a new debtor
 const createDebtor = async (req, res) => {
-  const { name, contact } = req.body;
+  const { userId, name, contact } = req.body;
 
-  if (!name) {
-    return res.status(400).json({ message: "Name is required" });
+  if (!userId || !name) {
+    return res.status(400).json({ message: "UserId and Name are required" });
   }
 
   try {
-    const debtor = await Debtor.create({ name, contact });
+    const debtor = await Debtor.create({ userId, name, contact });
     res.status(201).json(debtor);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -49,12 +49,12 @@ const createDebtor = async (req, res) => {
 // UPDATE an existing debtor by ID
 const updateDebtor = async (req, res) => {
   const { id } = req.params;
-  const { name, contact, totalBalance, debts } = req.body;
+  const { name, contact, debts } = req.body;
 
   try {
     const updatedDebtor = await Debtor.findByIdAndUpdate(
       id,
-      { name, contact, totalBalance, debts },
+      { name, contact, debts },
       { new: true, runValidators: true } // Return updated doc and validate input
     );
     if (!updatedDebtor) {

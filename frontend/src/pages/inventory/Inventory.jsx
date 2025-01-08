@@ -1,26 +1,75 @@
 import styles from './Inventory.module.css';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '../navigation/Navigation';
+import {jwtDecode} from "jwt-decode"; 
 
 function Inventory() {
     const [items, setItems] = useState([]); // State for inventory items
     const [filters, setFilters] = useState({ search: '', sort: '' }); // State for filtering and sorting
     const [renderForm, setRenderForm] = useState(false);
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
 
-    // Fetch items from the API
-    const fetchItems = async () => {
+  // Check if the user is logged in and token is valid
+  useEffect(() => {
+    if (!token) {
+        navigate("/login");  // Redirect to login page if no token is found
+    } else {
         try {
-            const response = await fetch('/api/inventory');
-            const data = await response.json();
-            setItems(data);
+            const decodedToken = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+
+            if (decodedToken.exp <= currentTime) {
+                localStorage.removeItem("token");  // Remove expired token
+                navigate("/login");  // Redirect to login page if token is expired
+            } else {
+                localStorage.setItem("userId", decodedToken.id); // Store userId in local storage
+            }
         } catch (error) {
-            console.error('Error fetching items:', error);
+            console.error("Error decoding token:", error);
+            localStorage.removeItem("token");  // Remove invalid token
+            navigate("/login");  // Redirect to login page if token is invalid
         }
-    };
+    }
+}, [token, navigate]);
+
+  const fetchItems = async () => {
+    const storedUserId = localStorage.getItem("userId");
+    if (!storedUserId) {
+      console.error("No userId found in localStorage.");
+      return; // Prevent the API call if no userId is found
+    }
+    try {
+      const response = await fetch(`/api/inventory/${storedUserId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch items: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setItems(data);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+  
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      fetchItems();
+    } else {
+      console.error("No userId found. Redirecting to login.");
+      navigate("/login");
+    }
+  }, [navigate]);
+  
+  
+
 
     useEffect(() => {
         fetchItems();
-    }, []);
+    }, [userId]);
 
     // Add an item via the API
     const addItem = async (e) => {
@@ -29,7 +78,7 @@ function Inventory() {
         const price = parseFloat(e.target.price.value);
 
         try {
-            const response = await fetch('/api/inventory', {
+            const response = await fetch(`/api/inventory/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, price }),
@@ -49,18 +98,18 @@ function Inventory() {
     // Handle filter change and fetch filtered/sorted items
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-    
+
         // Update the filters state
         setFilters((prevFilters) => {
             const updatedFilters = { ...prevFilters, [name]: value };
-    
+
             // Fetch updated items based on new filters
             const queryParams = new URLSearchParams(updatedFilters).toString();
-            fetch(`/api/inventory/search?${queryParams}`)
+            fetch(`/api/inventory/search/${userId}?${queryParams}`)
                 .then((response) => response.json())
                 .then((data) => setItems(data))
                 .catch((error) => console.error('Error filtering items:', error));
-    
+
             return updatedFilters; // Return the updated state
         });
     };
@@ -68,7 +117,7 @@ function Inventory() {
     // Delete an item
     const deleteItem = async (id) => {
         try {
-            const response = await fetch(`/api/inventory/${id}`, {
+            const response = await fetch(`/api/inventory/${userId}/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -138,7 +187,7 @@ function Inventory() {
                         <select
                             name="sort"
                             onChange={handleFilterChange}
-                            className={styles.input} c5
+                            className={styles.input}
                         >
                             <option value="">Sort By</option>
                             <option value="name">Name</option>
@@ -150,21 +199,24 @@ function Inventory() {
                     </div>
 
                     <ul className={styles.list}>
-                        {items.map((item) => (
+                        {Array.isArray(items) ? (
+                            items.map((item) => (
                             <li key={item._id} className={styles.listItem}>
                                 <h3>{item.name}</h3>
-                                <p>
-                                    Price: {item.price.toFixed(2)}
-                                </p>
+                                <p>Price: {item.price.toFixed(2)}</p>
                                 <button
-                                    className={styles.button}
-                                    onClick={() => deleteItem(item._id)}
+                                className={styles.button}
+                                onClick={() => deleteItem(item._id)}
                                 >
-                                    Delete
+                                Delete
                                 </button>
                             </li>
-                        ))}
-                    </ul>
+                            ))
+                        ) : (
+                            <p>No items to display</p>
+                        )}
+                        </ul>
+
                 </div>
             </div>
         </>

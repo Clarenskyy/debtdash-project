@@ -20,7 +20,7 @@ const getDebtorById = async (req, res) => {
 // Add inventory debt for a specific user
 const addInventoryDebt = async (req, res) => {
   const { userId, id } = req.params;
-  const { description, amount, itemId, quantity } = req.body;
+  const { itemId, quantity } = req.body;
 
   try {
     const debtor = await Debtor.findOne({ _id: id, userId });

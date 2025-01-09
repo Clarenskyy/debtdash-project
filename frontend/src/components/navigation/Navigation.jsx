@@ -25,7 +25,7 @@ function Navigation() {
                     </div>
                     <div>
                         <Link to="/inventory"> 
-                        <NavDisplay imageUrl={inventoryLogo} textName="Inventory List" />
+                        <NavDisplay imageUrl={inventoryLogo} textName="Item List" />
                         </Link>
                     </div>
                 </nav>

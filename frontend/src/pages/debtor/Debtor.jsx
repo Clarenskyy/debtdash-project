@@ -5,6 +5,7 @@ import Navigation from "../../components/navigation/Navigation";
 import { Link } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
 
+
 function Debtor() {
     const [debtors, setDebtors] = useState([]);
     const [renderForm, setRenderForm] = useState(false);

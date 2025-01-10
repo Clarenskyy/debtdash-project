@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Debtor from "./pages/debtor/Debtor.jsx";
+import { DebtorProvider } from './context/DebtorContext.jsx';
 import Inventory from './pages/inventory/Inventory.jsx';
 import Welcome from "./pages/welcome/Welcome.jsx";
 import DebtorDetail from './pages/debtor-detail/DebtorDetail.jsx';
@@ -25,7 +26,7 @@ function App() {
         <Routes>
           <Route index path='/' element={<AuthPage />} />
           <Route index path='/home' element={<Welcome />} />
-          <Route path='/debt' element={<Debtor />} />
+          <Route path='/debt' element={<DebtorProvider><Debtor /></DebtorProvider>} />
           <Route path='/debt/:id' element={<DebtorDetail />} /> 
           <Route path='/inventory' element={<Inventory />} />
           

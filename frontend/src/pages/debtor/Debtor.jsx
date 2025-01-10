@@ -8,7 +8,7 @@ import DebtorList from '../../components/debtor-related/DebtorList';
 import { DebtorContext } from '../../context/DebtorContext';
 
 function Debtor() {
-    const {renderForm, setRenderForm, searchQuery, editDebtor, setEditDebtor, loading, fadeIn, handleSearch, filteredDebtors, deleteDebtor} = useContext(DebtorContext);
+    const {renderForm, setRenderForm, searchQuery, editDebtor, setEditDebtor, loading, fadeIn, handleSearch, filteredDebtors, deleteDebtor, addDebtor, handleEditSubmit} = useContext(DebtorContext);
 
     if (loading) {
         return (
@@ -28,9 +28,9 @@ function Debtor() {
                 <div className={styles.content}>
                     <h1 className={styles.heading}>DEBTOR LIST</h1>
 
-                    <SearchDebtor searchQuery={searchQuery} handleSearch={handleSearch} setRenderForm={setRenderForm} />
+                    <SearchDebtor searchQuery={searchQuery} handleSearch={handleSearch} setRenderForm={setRenderForm} renderForm={renderForm}/>
 
-                    {renderForm && (<AddDebtorForm addDebtor={addDebtor} onClose={() => setRenderForm(false)} />)}
+                    {renderForm && (<AddDebtorForm addDebtor={addDebtor} onClose={(e) => {setRenderForm(false)}} />)}
 
                     {editDebtor && (<EditDebtor editDebtor={editDebtor} handleEditSubmit={handleEditSubmit}/>)}
 

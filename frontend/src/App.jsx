@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Debtor from "./pages/debtor/Debtor.jsx";
 import { DebtorProvider } from './context/DebtorContext.jsx';
 import Inventory from './pages/inventory/Inventory.jsx';
+import { InventoryProvider } from './context/InventoryContext.jsx';
 import Welcome from "./pages/welcome/Welcome.jsx";
 import DebtorDetail from './pages/debtor-detail/DebtorDetail.jsx';
 import { DebtorDetailProvider } from './context/DebtorDetailContext.jsx';
@@ -29,7 +30,7 @@ function App() {
           <Route index path='/home' element={<Welcome />} />
           <Route path='/debt' element={<DebtorProvider><Debtor /></DebtorProvider>} />
           <Route path='/debt/:id' element={<DebtorDetailProvider><DebtorDetail /></DebtorDetailProvider>} /> 
-          <Route path='/inventory' element={<Inventory />} />
+          <Route path='/inventory' element={<InventoryProvider><Inventory /></InventoryProvider>} />
           
           {/* Add login and signup routes */}
           <Route path='/login' element={<Login />} />

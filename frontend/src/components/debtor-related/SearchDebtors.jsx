@@ -1,6 +1,6 @@
 import styles from './DebtorComponents.module.css';
 
-function SearchDebtor({searchQuery, handleSearch, setRenderForm}) {
+function SearchDebtor({searchQuery, handleSearch, setRenderForm, renderForm}) {
 
     return(
         <>

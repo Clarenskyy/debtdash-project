@@ -30,6 +30,7 @@ function DebtorDetail() {
     return (
 <>
     <Navigation />
+    <div className={styles.page}>
     <div className={styles.container}>
         <button onClick={handleReturnToList} className={`${styles.button} ${styles.returnButton}`}>
             Return to Debtor List
@@ -39,20 +40,21 @@ function DebtorDetail() {
 
         <DebtList debtor={debtor} />
 
-        <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
-
-        <button onClick={() => setIsDebtAdding(true)} className={styles.button}>
-            Add Debt
-        </button>
-
         {isDebtAdding && (<AddingDebtForm setDebtType={setDebtType} debtType={debtType} description={description} setDescription={setDescription} amount={amount} setAmount={setAmount} quantities={quantities} setQuantities={setQuantities} isDebtAdding={isDebtAdding} setIsDebtAdding={setIsDebtAdding} inventoryItems={inventoryItems} handleAddDebt={handleAddDebt} handleAddInventoryItem={handleAddInventoryItem} />)}
 
         {isPayingDebt && (<PayingDebtForm paymentAmount={paymentAmount} setPaymentAmount={setPaymentAmount} handlePayment={handlePayment} isPayingDebt={isPayingDebt} setIsPayingDebt={setIsPayingDebt} />)}
 
+        <p>Total Balance: {debtor.totalBalance.toFixed(2)}</p>
+        <button onClick={() => setIsDebtAdding(true)} className={styles.button}>
+            Add Debt
+        </button>
         <button onClick={() => setIsPayingDebt(true)} className={styles.button}>
             Pay Debt
         </button>
+
     </div>
+    </div>
+
 </>
 
     );

@@ -1,94 +1,28 @@
-/* Container */
+.page {
+    position: fixed;
+    top: 70px;
+    left: 70px;
+    right: 0;
+    bottom: 0;
+}
+
 .container {
     position: relative;
-    top: 70px;
     padding: 20px;
     font-family: 'Roboto', sans-serif;
     background-color: #F5F5F5;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
     text-align: center;
-}
-
-.returnButton {
-    position: absolute;
-    top: 0px;
-    left: 25px;
-}
-
-
-.bgContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    backdrop-filter: blur(8px);
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 50;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.bgContainer.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.formOverlay {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 500px;
-    background-color: #FFFFFF;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    transform: translateY(-20px);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.bgContainer.show .formOverlay {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-/* Heading */
 .heading {
     font-size: 2.5rem;
     color: #4A148C;
     margin-bottom: 20px;
-}
-
-.formContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.radioGroup label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 1rem;
-    color: #4A148C;
-}
-
-.input {
-    padding: 12px;
-    border: 1px solid #CCCCCC;
-    border-radius: 8px;
-    font-size: 1rem;
-    width: 100%;
 }
 
 .buttonGroup {
@@ -116,91 +50,3 @@
     outline: none;
 }
 
-
-.debtForm {
-    position: relative;
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #F3E5F5;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    text-align: center;
-    z-index: 1010;
-}
-
-.debtForm h3 {
-    font-size: 1.8rem;
-    color: #4A148C;
-    margin-bottom: 20px;
-}
-
-
-.debtForm input[type="text"],
-.debtForm input[type="number"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #CCCCCC;
-    border-radius: 8px;
-    font-size: 1rem;
-    outline-color: #4A148C;
-}
-
-
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 20px 0;
-}
-
-ul li {
-    background-color: #F3E5F5;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-ul li p {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
-}
-
-
-ul li p span {
-    font-size: 0.9rem;
-    color: #6A1B9A;
-}
-
-
-.returnButton {
-    background-color: #2E294E;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.returnButton:hover {
-    background-color: #4A148C;
-}
-
-.returnButton:focus {
-    outline: none;
-}
-
-.debtForm label {
-    font-size: 1rem;
-    color: #4A148C;
-    margin-right: 20px;
-}
-
-.debtForm input[type="radio"] {
-    margin-right: 8px;
-}

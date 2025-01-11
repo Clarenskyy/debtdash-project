@@ -60,3 +60,8 @@ jobs:
           app-name: "DebtDash"
           slot-name: "Production"
           package: ./
+
+      - name: Set environment variables
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV

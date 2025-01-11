@@ -1,19 +1,31 @@
+.bg{
+    background-image: url('../../assets/bg/bg1.svg');    
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .txtLogo{
     position: absolute;
     width: 200px;
     top: 11%;
-    right: 43%;
+
     animation: bounce 2s infinite;
 }
 
 .container {
     position: relative;
     height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #011638;
     font-family: 'Roboto', sans-serif;
     color: white;
 }
@@ -21,7 +33,11 @@
 .formContainer {
     width: 100%;
     max-width: 400px;
-    background-color: #2E294E;
+    background-image: url('../../assets/bg/bg2.svg');    
+    background-size: 600px; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -73,6 +89,7 @@
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .button:hover {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Login.module.css";
+import styles from "./login.module.css";
 import {jwtDecode} from "jwt-decode";  
 import txtLogo from "../../assets/logo/text-logo.png";
 
@@ -71,10 +71,9 @@ const Login = () => {
   
 
   return (
+    <div className={styles.bg}>
     <div className={styles.container}>
-      <div>
-        <img src={txtLogo} className={styles.txtLogo} />
-      </div>
+      <img src={txtLogo} className={styles.txtLogo} />
       <div className={styles.formContainer}>
         <h2 className={styles.heading}>Login</h2>
         <form onSubmit={handleLogin}>
@@ -105,6 +104,8 @@ const Login = () => {
         {error && <p className={styles.error}>{error}</p>}
       </div>
     </div>
+    </div>
+
   );
 };
 

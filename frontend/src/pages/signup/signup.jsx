@@ -33,39 +33,39 @@ const Signup = () => {
   };
 
   return (
+    <div className={styles.bg}>
     <div className={styles.container}>
-      <div>
-        <img src={txtLogo} className={styles.txtLogo} />
-      </div>
-      <div className={styles.formContainer}>
-        <h2 className={styles.heading}>Signup</h2>
-        <form onSubmit={handleSignup}>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className={styles.input}
-            />
-          </div>
-          <button type="submit" className={styles.button}>
-            Signup
-          </button>
-        </form>
-        {error && <p className={styles.error}>{error}</p>}
-      </div>
+    <img src={txtLogo} className={styles.txtLogo} />
+    <div className={styles.formContainer}>
+      <h2 className={styles.heading}>Signup</h2>
+      <form onSubmit={handleSignup}>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
+        <button type="submit" className={styles.button}>
+          Signup
+        </button>
+      </form>
+      {error && <p className={styles.error}>{error}</p>}
+    </div>
+  </div>
     </div>
   );
 };

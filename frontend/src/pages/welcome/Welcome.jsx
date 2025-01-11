@@ -15,6 +15,7 @@ function Welcome() {
     return (
         <>
             <Navigation />
+            <div className="bg">
             <div className="animated-container" style={styles.container}>
                 <header className="animated-header" style={styles.header}>
                     <h1 className="animated-title" style={styles.title}>Welcome to the Debt Management System</h1>
@@ -37,6 +38,8 @@ function Welcome() {
                     </div>
                 </main>
             </div>
+            </div>
+
         </>
     );
 }
@@ -50,7 +53,11 @@ const styles = {
         bottom: 0,
         fontFamily: "'Roboto', sans-serif", 
         textAlign: "center",
-        backgroundColor: "#011638",
+        backgroundImage: "url('../../assets/bg/bg3.svg')",    
+        backgroundSize: "cover",
+        backgroundPosition: "center", 
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
         color: "white",
         height: "100vh",
         margin: 0,
@@ -60,7 +67,6 @@ const styles = {
         justifyContent: "space-between",
     },
     header: {
-        backgroundColor: "#2E294E",
         padding: "20px",
     },
     title: {

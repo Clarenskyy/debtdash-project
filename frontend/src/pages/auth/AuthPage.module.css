@@ -1,10 +1,17 @@
+.bg{
+    background-image: url('../../assets/bg/bg1.svg');    
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+}
+
 .container {
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #011638;
     font-family: 'Roboto', sans-serif;
     color: white;
     text-align: center;
@@ -15,7 +22,8 @@
 .logo {
     width: 150px;
     margin-bottom: 20px;
-    animation: logoBounce 1.5s infinite;
+
+    animation-duration: 1s
 }
 
 .heading {
@@ -36,6 +44,7 @@
 .buttons {
     display: flex;
     gap: 20px;
+    
     animation: fadeInButtons 1s ease-in-out;
 }
 
@@ -52,6 +61,7 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .button:hover {
@@ -66,15 +76,6 @@
     }
     to {
         opacity: 1;
-    }
-}
-
-@keyframes logoBounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
     }
 }
 

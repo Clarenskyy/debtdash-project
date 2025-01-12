@@ -31,14 +31,27 @@ export const DebtorProvider = ({children}) => {
                 console.error('User not authenticated');
                 return;
             }
-
+    
             try {
                 const response = await fetch(`/api/debt/${userId}`);
+                
+                // Check if the response is not ok (status code is not in the 200-299 range)
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                
+                // Parse the response as JSON
                 const json = await response.json();
-                setDebtors(json);
+                
+                // Check if the response contains data (to ensure it's not empty)
+                if (json.length === 0) {
+                    console.log('No debtors found');
+                } else {
+                    console.log('Debtors fetched successfully:', json);  // Logging the fetched debtors data
+                    setDebtors(json);
+                }
+                
+                // Fade-in animation or transition logic
                 setFadeIn(true);
             } catch (error) {
                 console.error('Error fetching debtors:', error.message);
@@ -46,9 +59,11 @@ export const DebtorProvider = ({children}) => {
                 setLoading(false);
             }
         };
-
-        fetchDebtors();
-    }, [userId]);
+    
+        fetchDebtors(); // Call the fetchDebtors function inside the useEffect
+    
+    }, [userId]);  // Dependency array, this effect runs when userId changes
+    
 
     useEffect(() => {
         if (newDebtor) {

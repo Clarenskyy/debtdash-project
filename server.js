@@ -7,6 +7,7 @@ const debtRoutes = require("./routes/debtor");
 const itemListRoutes = require("./routes/itemlist");
 const debtlistRoutes = require("./routes/debt");
 const userRoutes = require("./routes/user");
+const path = require("path");
 
 // Creates an Express app
 const app = express();

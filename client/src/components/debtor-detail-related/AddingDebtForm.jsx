@@ -29,38 +29,43 @@ function AddingDebtForm({ setDebtType, debtType, description, setDescription, am
                             </label>
                         </div>
 
-                        {debtType === "inventory" && (
-                            <div>
-                                <h4>Select Inventory Item</h4>
-                                <ul>
-                                    {inventoryItems.map((item, index) => (
-                                        <li key={index}>
-                                            <span>
-                                                {item.name} - {item.price.toFixed(2)}
-                                            </span>
-                                            <input
-                                                type="number"
-                                                placeholder="Quantity"
-                                                min="1"
-                                                value={quantities[item._id] || ""}
-                                                onChange={(e) =>
-                                                    setQuantities({
-                                                        ...quantities,
-                                                        [item._id]: Number(e.target.value),
-                                                    })
-                                                }
-                                            />
-                                            <button
-                                                onClick={() => handleAddInventoryItem(item)}
-                                                className={styles.button}
-                                            >
-                                                Add to Debt
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+{debtType === "inventory" && (
+    <>
+
+    <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "5px", }}>
+    <h4>Select Inventory Item</h4>
+        <ul>
+            {inventoryItems.map((item, index) => (
+                <li key={index} style={{ marginBottom: "10px", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+                    <span style={{ flex: "2.5", minWidth: "150px" }}>
+                        {item.name} - {item.price.toFixed(2)}
+                    </span>
+                    <input
+                        type="number"
+                        placeholder="Quantity"
+                        min="1"
+                        value={quantities[item._id] || ""}
+                        onChange={(e) =>
+                            setQuantities({
+                                ...quantities,
+                                [item._id]: Number(e.target.value),
+                            })
+                        }
+                        style={{ margin: "0 10px", padding: "5px", width: "50px", flex: "1", minWidth: "50px" }}
+                    />
+                    <button
+                        onClick={() => handleAddInventoryItem(item)}
+                        className={styles.button} style={{ flex: "1", minWidth: "100px" }}
+                    >
+                        Add to Debt
+                    </button>
+                </li>
+            ))}
+        </ul>
+    </div>
+    </>
+)}
+
 
                         {debtType === "manual" && (
                             <div>

@@ -9,7 +9,6 @@
     flex-direction: column;
     background-color: #011638;
     z-index: 1000;
-
 }
 .navBar div{
     display: flex;

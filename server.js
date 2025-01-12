@@ -12,13 +12,6 @@ const path = require("path");
 // Creates an Express app
 const app = express();
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "dist")));
-
-// Catch-all handler to serve React's index.html for unmatched routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
 // Middleware
 app.use(express.json());
 
@@ -27,6 +20,14 @@ app.use("/api/debt", debtRoutes);
 app.use("/api/inventory", itemListRoutes);
 app.use("/api/debtlist", debtlistRoutes);
 app.use("/api/user", userRoutes);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "dist")));
+
+// Catch-all handler to serve React's index.html for unmatched routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 // Connect to MongoDB and start the server
 mongoose

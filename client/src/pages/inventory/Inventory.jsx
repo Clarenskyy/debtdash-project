@@ -10,7 +10,7 @@ import InventoryList from '../../components/inventory-related/InventoryList';
 
 
 function Inventory() {
-   const { items, renderForm, addItem, handleFilterChange, deleteItem, renderAddItem, setRenderForm, editItem, editItemForm, isEditting, handleEditItem, setEditItemForm, setEditItem, } = useContext(InventoryContext);
+   const { items, renderForm, addItem, handleFilterChange, deleteItem, renderAddItem, setRenderForm, editItem, editItemForm, isEditting, handleEditItem, setEditItemForm } = useContext(InventoryContext);
 
     return (
         <>
